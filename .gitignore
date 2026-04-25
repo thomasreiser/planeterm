@@ -1,0 +1,5 @@
+planeterm
+/bin/
+/external/
+*.log
+.env
