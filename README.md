@@ -4,25 +4,7 @@ A terminal-mode [PPI scope](https://en.wikipedia.org/wiki/Plan_position_indicato
 feed. Green CRT aesthetic, range rings, every known contact shown at once
 with callsign, altitude and distance.
 
-```
-                          N
-                          ·
-                ·· · · · · · · · ··
-            ··                       ··
-          ·                            ·
-         ·       ·  ·  ·  ┼  ·  ·  ·    ·
-        ·            ↗ DLH441 FL340 87.4 km ·
-   W    ·   ─ ─ ─ ─ ─ ─┼─ ─ ─ ─ ─ ─ ─    ·   E
-        ·                                 ·
-         ·    ↘ BAW213 FL280 32.1 km     ·
-          ·                             ·
-            ··                       ··
-                ·· · · · · · · · ··
-                          ·
-                          S
- SRC dump1090@localhost:30003  ONLINE  msgs=14238             RNG 100 NM
- TRK 24   IN RANGE 8   [+/-] zoom   [q] quit
-```
+![planeterm](ppi.gif)
 
 ## Real ADS-B (macOS & Linux)
 
@@ -120,4 +102,4 @@ Env-var equivalents: `DUMP1090_HOST`, `DUMP1090_PORT`, `RADAR_LAT`,
 
 ## License
 
-MIT.
+MIT
