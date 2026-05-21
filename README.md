@@ -89,6 +89,10 @@ Env-var equivalents: `DUMP1090_HOST`, `DUMP1090_PORT`, `RADAR_LAT`,
 - `+` / `=` — zoom in (smaller range)
 - `-` / `_` — zoom out (larger range)
 
+## Features
+
+- Hightlight aircraft based on callcode (I use it to highlight military vehicles)
+
 ## How it works
 
 - `internal/sbs` opens a TCP connection to dump1090's SBS-1 text feed

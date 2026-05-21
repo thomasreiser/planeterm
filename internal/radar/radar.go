@@ -12,6 +12,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 
 	"planeterm/internal/aircraft"
+	"planeterm/internal/highlight"
 )
 
 // Source is the minimum surface the radar needs to render the data-source
@@ -23,23 +24,25 @@ type Source interface {
 }
 
 type Radar struct {
-	screen tcell.Screen
-	store  *aircraft.Store
-	source Source
+	screen     tcell.Screen
+	store      *aircraft.Store
+	source     Source
+	highlights *highlight.Config
 
 	centerLat float64
 	centerLon float64
 	rangeNm   float64
 }
 
-func New(screen tcell.Screen, store *aircraft.Store, source Source, lat, lon, rangeNm float64) *Radar {
+func New(screen tcell.Screen, store *aircraft.Store, source Source, lat, lon, rangeNm float64, highlights *highlight.Config) *Radar {
 	return &Radar{
-		screen:    screen,
-		store:     store,
-		source:    source,
-		centerLat: lat,
-		centerLon: lon,
-		rangeNm:   rangeNm,
+		screen:     screen,
+		store:      store,
+		source:     source,
+		highlights: highlights,
+		centerLat:  lat,
+		centerLon:  lon,
+		rangeNm:    rangeNm,
 	}
 }
 
@@ -104,7 +107,7 @@ func (r *Radar) draw() {
 	cx := w / 2
 	cy := plotH / 2
 
-	// Cells are ~2× taller than wide, so a "visually round" circle uses
+	// Cells are ca. 2x taller than wide, so a "visually round" circle uses
 	// radius rows and 2·radius columns
 	radius := plotH/2 - 2
 	if hMax := (w/2 - 2) / 2; hMax < radius {
@@ -150,8 +153,8 @@ func (r *Radar) draw() {
 	drawText(s, cx+2*radius+1, cy, "E", labelStyle)
 
 	// Aircraft tracks — every known contact, drawn at full brightness
-	planeStyle := tcell.StyleDefault.Foreground(tcell.NewRGBColor(150, 255, 170)).Background(scopeBg).Bold(true)
-	labelStyleA := tcell.StyleDefault.Foreground(tcell.NewRGBColor(180, 230, 180)).Background(scopeBg)
+	defaultPlane := tcell.StyleDefault.Foreground(tcell.NewRGBColor(150, 255, 170)).Background(scopeBg).Bold(true)
+	defaultLabel := tcell.StyleDefault.Foreground(tcell.NewRGBColor(180, 230, 180)).Background(scopeBg)
 	inRange := 0
 	snaps := r.store.Snapshot()
 	for _, a := range snaps {
@@ -169,6 +172,13 @@ func (r *Radar) draw() {
 		ax := cx + int(math.Round(2*float64(radius)*fracX))
 		ay := cy + int(math.Round(float64(radius)*fracY))
 
+		planeStyle, labelStyle := defaultPlane, defaultLabel
+		if rule := r.highlights.Match(a.Callsign); rule != nil {
+			c := tcell.NewRGBColor(int32(rule.Color[0]), int32(rule.Color[1]), int32(rule.Color[2]))
+			planeStyle = tcell.StyleDefault.Foreground(c).Background(scopeBg).Bold(true)
+			labelStyle = tcell.StyleDefault.Foreground(c).Background(scopeBg).Bold(true)
+		}
+
 		s.SetContent(ax, ay, planeGlyph(a.Track), nil, planeStyle)
 
 		label := strings.TrimSpace(a.Callsign)
@@ -180,7 +190,7 @@ func (r *Radar) draw() {
 		}
 		// dist is in nautical miles; 1 NM = 1852 m exactly
 		label = fmt.Sprintf("%s %s", label, formatDistance(int(math.Round(dist*1852))))
-		drawText(s, ax+1, ay-1, label, labelStyleA)
+		drawText(s, ax+1, ay-1, label, labelStyle)
 	}
 
 	r.drawStatus(w, h, len(snaps), inRange)

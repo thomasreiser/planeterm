@@ -1,0 +1,24 @@
+# Highlight rules. Aircraft whose callsign starts with any of the listed
+# prefixes get rendered in the rule's color. First matching rule wins.
+# Colors are RGB triplets (0-255).
+rules:
+  - name: military
+    color: [255, 60, 60]
+    prefixes:
+      # United States
+      - RCH    # USAF Air Mobility Command (Reach)
+      - SAM    # USAF Special Air Mission
+      - CNV    # US Navy (Convoy)
+      - PAT    # US Army (Patriot)
+      - JOSA   # Joint Operational Support Airlift
+      - EVAC   # USAF aeromedical evacuation
+      # NATO & allies
+      - RRR    # UK Royal Air Force (Rafair)
+      - CFC    # Canadian Armed Forces (Canforce)
+      - GAF    # German Air Force (Luftwaffe)
+      - IAM    # Italian Air Force
+      - CTM    # French Air Force (Cotam)
+      - AME    # Spanish Air Force
+      - BAF    # Belgian Air Component
+      - NAF    # Royal Netherlands Air Force
+      - NATO   # NATO common-fleet (e.g. AWACS)
