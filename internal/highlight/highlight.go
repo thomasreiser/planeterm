@@ -1,5 +1,5 @@
-// Package highlight loads callsign-based render rules from YAML and matches
-// aircraft against them
+// Package highlight loads callsign- and hex-based render rules from YAML
+// and matches aircraft against them
 package highlight
 
 import (
@@ -8,18 +8,24 @@ import (
 	"strings"
 
 	"gopkg.in/yaml.v3"
+
+	"planeterm/internal/mil"
 )
 
-// Rule pairs a list of callsign prefixes with an RGB color
+// Rule pairs callsign prefixes (and optionally the loaded mil hex ranges)
+// with an RGB color
 type Rule struct {
 	Name     string   `yaml:"name"`
 	Color    [3]int   `yaml:"color"`
 	Prefixes []string `yaml:"prefixes"`
+	Mil      bool     `yaml:"mil"` // also match if ICAO is in the mil ranges
 }
 
 // Config is the on-disk format of highlight.yaml
 type Config struct {
 	Rules []Rule `yaml:"rules"`
+
+	mil *mil.Config
 }
 
 // Load reads and parses a highlight YAML file
@@ -48,20 +54,32 @@ func Load(path string) (*Config, error) {
 	return &c, nil
 }
 
-// Match returns the first rule whose prefixes match callsign, or nil if
-// none do..
-func (c *Config) Match(callsign string) *Rule {
+// SetMil attaches the loaded mil ranges so rules with `mil: true` can fire
+// on hex membership. Safe to call with nil.
+func (c *Config) SetMil(m *mil.Config) {
+	if c == nil {
+		return
+	}
+	c.mil = m
+}
+
+// Match returns the first rule that matches the given callsign or icao,
+// or nil if none do.
+func (c *Config) Match(callsign, icao string) *Rule {
 	if c == nil {
 		return nil
 	}
 	cs := strings.ToUpper(strings.TrimSpace(callsign))
-	if cs == "" {
-		return nil
-	}
 	for i := range c.Rules {
-		for _, p := range c.Rules[i].Prefixes {
-			if p != "" && strings.HasPrefix(cs, p) {
-				return &c.Rules[i]
+		r := &c.Rules[i]
+		if r.Mil && c.mil.Contains(icao) {
+			return r
+		}
+		if cs != "" {
+			for _, p := range r.Prefixes {
+				if p != "" && strings.HasPrefix(cs, p) {
+					return r
+				}
 			}
 		}
 	}

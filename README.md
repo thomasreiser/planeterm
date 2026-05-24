@@ -79,9 +79,11 @@ blacklist snippet above.
 | `-lon`            | `11.953948`          | radar center longitude (degrees)                 |
 | `-range`          | `100`                | radar range in nautical miles                    |
 | `-ttl`            | `60s`                | drop aircraft after this long with no update     |
+| `-highlight`      | `highlight.yaml`     | callsign-based highlight rules (missing OK)      |
+| `-mil-file`       | `mil.yaml`           | military ICAO hex ranges (missing OK)            |
 
 Env-var equivalents: `DUMP1090_HOST`, `DUMP1090_PORT`, `RADAR_LAT`,
-`RADAR_LON`, `RADAR_RANGE_NM`.
+`RADAR_LON`, `RADAR_RANGE_NM`, `HIGHLIGHT_FILE`, `MIL_FILE`.
 
 ## Keys
 
@@ -91,7 +93,12 @@ Env-var equivalents: `DUMP1090_HOST`, `DUMP1090_PORT`, `RADAR_LAT`,
 
 ## Features
 
-- Hightlight aircraft based on callcode (I use it to highlight military vehicles)
+- Highlight aircraft by callsign prefix (see `highlight.yaml`).
+- Highlight aircraft by ICAO 24-bit address against well-known military
+  hex ranges (see `mil.yaml`). The shipped file covers the commonly cited
+  US + NATO allocations and is loaded by default; any highlight rule with
+  `mil: true` will fire for matching aircraft. Edit or replace it via
+  `-mil-file` to taste.
 
 ## How it works
 

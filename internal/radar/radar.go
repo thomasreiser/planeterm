@@ -173,7 +173,7 @@ func (r *Radar) draw() {
 		ay := cy + int(math.Round(float64(radius)*fracY))
 
 		planeStyle, labelStyle := defaultPlane, defaultLabel
-		if rule := r.highlights.Match(a.Callsign); rule != nil {
+		if rule := r.highlights.Match(a.Callsign, a.ICAO); rule != nil {
 			c := tcell.NewRGBColor(int32(rule.Color[0]), int32(rule.Color[1]), int32(rule.Color[2]))
 			planeStyle = tcell.StyleDefault.Foreground(c).Background(scopeBg).Bold(true)
 			labelStyle = tcell.StyleDefault.Foreground(c).Background(scopeBg).Bold(true)

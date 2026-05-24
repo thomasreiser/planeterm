@@ -1,9 +1,12 @@
 # Highlight rules. Aircraft whose callsign starts with any of the listed
-# prefixes get rendered in the rule's color. First matching rule wins.
+# prefixes — or whose ICAO hex falls in a mil range (when `mil: true`) —
+# get rendered in the rule's color. First matching rule wins.
 # Colors are RGB triplets (0-255).
 rules:
   - name: military
     color: [255, 60, 60]
+    # Also match anything in the loaded mil ranges (see mil.yaml)
+    mil: true
     prefixes:
       # United States
       - RCH    # USAF Air Mobility Command (Reach)

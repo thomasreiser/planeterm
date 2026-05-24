@@ -1,0 +1,54 @@
+# Well-known military ICAO 24-bit address ranges (inclusive, hex)
+# Used together with highlight.yaml: any rule with `mil: true` will fire
+# for aircraft whose hex falls into one of these ranges
+#
+# These are the commonly cited public allocations for US + NATO operators
+ranges:
+  # ---------- United States ----------
+  - { name: "US DoD",                start: ADF7C8, end: ADFFFF }
+  - { name: "US Military",           start: AE0000, end: AFFFFF }
+
+  # ---------- United Kingdom ----------
+  - { name: "UK Military",           start: 43C000, end: 43CFFF }
+
+  # ---------- Canada ----------
+  - { name: "Canadian Forces",       start: C20000, end: C3FFFF }
+
+  # ---------- Germany ----------
+  - { name: "German Luftwaffe",      start: 3EA000, end: 3EBFFF }
+  - { name: "German Navy",           start: 3F8000, end: 3FBFFF }
+
+  # ---------- France ----------
+  - { name: "French Air Force",      start: 3B7000, end: 3B7FFF }
+  - { name: "French Navy",           start: 39B000, end: 39BFFF }
+
+  # ---------- Italy ----------
+  - { name: "Italian Military",      start: 33FF00, end: 33FFFF }
+
+  # ---------- Spain ----------
+  - { name: "Spanish Military",      start: 34F000, end: 34FFFF }
+
+  # ---------- Netherlands ----------
+  - { name: "Royal Netherlands AF",  start: 484000, end: 484FFF }
+
+  # ---------- Belgium ----------
+  - { name: "Belgian Military",      start: 448000, end: 4483FF }
+
+  # ---------- Denmark ----------
+  - { name: "Royal Danish AF",       start: 458000, end: 4583FF }
+
+  # ---------- Norway ----------
+  - { name: "Royal Norwegian AF",    start: 478100, end: 4781FF }
+
+  # ---------- Poland ----------
+  - { name: "Polish Air Force",      start: 48D800, end: 48DFFF }
+
+  # ---------- Czech Republic ----------
+  - { name: "Czech Air Force",       start: 49D000, end: 49D3FF }
+
+  # ---------- Turkey ----------
+  - { name: "Turkish Air Force",     start: 4B7000, end: 4B7FFF }
+
+  # ---------- NATO common fleet ----------
+  # E-3A AWACS, registered in Luxembourg
+  - { name: "NATO AWACS",            start: 4D0220, end: 4D023F }

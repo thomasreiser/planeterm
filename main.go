@@ -16,6 +16,7 @@ import (
 
 	"planeterm/internal/aircraft"
 	"planeterm/internal/highlight"
+	"planeterm/internal/mil"
 	"planeterm/internal/radar"
 	"planeterm/internal/sbs"
 )
@@ -28,12 +29,18 @@ func main() {
 	rangeNm := flag.Float64("range", envFloat("RADAR_RANGE_NM", 100), "radar range, nautical miles")
 	ttl := flag.Duration("ttl", 60*time.Second, "drop aircraft after this long without an update")
 	highlightPath := flag.String("highlight", env("HIGHLIGHT_FILE", "highlight.yaml"), "path to highlight rules YAML (missing file is OK)")
+	milPath := flag.String("mil-file", env("MIL_FILE", "mil.yaml"), "path to military ICAO hex ranges YAML (missing file is OK)")
 	flag.Parse()
 
 	highlights, err := highlight.Load(*highlightPath)
 	if err != nil {
 		log.Printf("highlight: %v (continuing without rules)", err)
 	}
+	milRanges, err := mil.Load(*milPath)
+	if err != nil {
+		log.Printf("mil: %v (continuing without ranges)", err)
+	}
+	highlights.SetMil(milRanges)
 
 	store := aircraft.NewStore(*ttl)
 	addr := net.JoinHostPort(*host, *port)
